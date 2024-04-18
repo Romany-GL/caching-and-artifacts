@@ -1,0 +1,8 @@
+name: caching
+on: [pull_request]
+jobs:
+  caching-dependecies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: cach-npm-deps
+        run: echo "caching"
