@@ -9,16 +9,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/cache@v3
+        id: cache-npm-i
         env:
           cache-name: cach-node-modules
         with:
           # key: ${{runner.os}}-build-${{env.cache-name}}
-          key: npm-cach
+          key: npm-cache
           path: ~/.npm
           restore-keys: |
             ${{runner.os}}-build-${{env.cache-name}}
             ${{runner.os}}-build
             ${{runner.os}}-
+
+      - name: print cached files
+        run: echo ${{toJson(steps.cache-npm-i.outputs)}}
 
   without-caching:
     runs-on: ubuntu-latest
