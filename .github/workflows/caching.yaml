@@ -2,7 +2,7 @@
 # We can retrieve the cached files by matching the provided key
 # restore-keys is another set of keys to retrieve the cached files, can match part of it not exactly matching
 # https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows
-name: caching-simple
+name: caching-manually
 on: [push]
 jobs:
   with-caching:
