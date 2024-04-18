@@ -29,7 +29,8 @@ jobs:
         run: npm list
 
       - name: Display Cache Output
-        run: echo '${{ toJSON(steps.cache-dependencies.outputs) }}'
+        run: echo ' cache outputs::::>>> ${{ toJSON(steps.cache-dependencies.outputs) }}'
+
       - name: Install dependencies
         run: npm install
 
