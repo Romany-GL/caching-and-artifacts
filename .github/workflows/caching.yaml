@@ -2,7 +2,7 @@
 # We can retrieve the cached files by matching the provided key
 # restore-keys is another set of keys to retrieve the cached files, can match part of it not exactly matching
 # https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows
-name: caching
+name: caching-simple
 on: [push]
 jobs:
   with-caching:
@@ -10,40 +10,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: cache-node-modules
-        id: cache-npm-i
+      - name: Cache node modules
+        id: cache-dependencies
         uses: actions/cache@v3
         env:
-          cache-name: cache-node-modules
+          cache-name: npm-cache
         with:
           path: ~/.npm
-          key: npm-cache
+          key: ${{runner.os}}-cache-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{runner.os}}-build-${{env.cache-name}}
-            ${{runner.os}}-build
-            ${{runner.os}}-
+            ${{ runner.os }}-cache-${{ env.cache-name }}-
+            ${{ runner.os }}-cache-
+            ${{ runner.os }}-
 
-      - name: print cached files
-        run: echo ${{toJson(steps.cache-npm-i.outputs)}}
+      - if: ${{ steps.cache-dependencies == 'true' }}
+        name: List the state of node modules
+        continue-on-error: true
+        run: npm list
+
+      - name: Display Cache Output
+        run: echo '${{ toJSON(steps.cache-dependencies.outputs) }}'
+      - name: Install dependencies
+        run: npm install
 
       - name: check cache status
-        run: echo "cache-hit status :::::>>" ${{steps.cache-npm-i.outputs.cache-hit}}
-
-  without-caching:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: install deps
-        run: npm ci
-      - name: use Axios
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const axios = require('axios')
-            const url = "https://jsonplaceholder.typicode.com/posts/1"
-            const res = await axios.get(url, {
-             headers: {
-               Accept: 'text/plain'
-             }
-            })
-            console.log("Post:::>>>> ", res.data)
+        run: echo "cache-hit status :::::>>" ${{steps.cache-dependencies.outputs.cache-hit}}
