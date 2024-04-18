@@ -40,7 +40,7 @@ jobs:
         run: npm test
       - name: list repo files
         run: ls -a
-      - name: upload-coverage
+      - name: upload-coverage-artifact
         uses: actions/upload-artifact@v4
         # always upload artifacts  even if test failed
         if: always()
@@ -48,3 +48,13 @@ jobs:
           name: code-coverage # name of the file to upload
           path: coverage # path to the file we want to upload
           retention-days: 10 # days to keep the artifact on GH
+      - name: download-coverage-artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: code-coverage # name of the artifact to download as we uploaded it
+          path: code-coverage-report # how we want to name of the downladed file
+      - name: list repo files
+        run: ls -a
+      - name: list downloaded artifact
+        run: ls -a
+        working-directory: code-coverage-report
