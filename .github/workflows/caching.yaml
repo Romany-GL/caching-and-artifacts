@@ -1,7 +1,26 @@
+# To cache files, we use the actions/cache@v4, and provide a key and a path.
+# We can retrieve the cached files by matching the provided key
+# restore-keys is another set of keys to retrieve the cached files, can match part of it not exactly matching
+# https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows
 name: caching
 on: [push]
 jobs:
-  caching-dependecies:
+  with-caching:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/cache@v3
+        env:
+          cache-name: cach-node-modules
+        with:
+          # key: ${{runner.os}}-build-${{env.cache-name}}
+          key: npm-cach
+          path: ~/.npm
+          restore-keys: |
+            ${{runner.os}}-build-${{env.cache-name}}
+            ${{runner.os}}-build
+            ${{runner.os}}-
+
+  without-caching:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,7 +34,7 @@ jobs:
             const url = "https://jsonplaceholder.typicode.com/posts/1"
             const res = await axios.get(url, {
              headers: {
-               Accepts: 'text/plain'
+               Accept: 'text/plain'
              }
             })
-            console.log("Joke:::>>>> ", res.data)
+            console.log("Post:::>>>> ", res.data)
