@@ -8,14 +8,16 @@ jobs:
   with-caching:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/cache@v3
+      - uses: actions/checkout@v4
+
+      - name: cache-node-modules
         id: cache-npm-i
+        uses: actions/cache@v3
         env:
-          cache-name: cach-node-modules
+          cache-name: cache-node-modules
         with:
-          # key: ${{runner.os}}-build-${{env.cache-name}}
-          key: npm-cache
           path: ~/.npm
+          key: npm-cache
           restore-keys: |
             ${{runner.os}}-build-${{env.cache-name}}
             ${{runner.os}}-build
@@ -23,6 +25,9 @@ jobs:
 
       - name: print cached files
         run: echo ${{toJson(steps.cache-npm-i.outputs)}}
+
+      - name: check cache status
+        run: echo "cache-hit status :::::>>" ${{steps.cache-npm-i.outputs.cache-hit}}
 
   without-caching:
     runs-on: ubuntu-latest
