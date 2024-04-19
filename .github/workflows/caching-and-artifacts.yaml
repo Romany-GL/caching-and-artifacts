@@ -37,7 +37,7 @@ jobs:
 
       - name: install deps
         run: npm ci
-
+      # run test to create coverage folder
       - name: run test
         run: npm test
 
