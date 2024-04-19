@@ -5,20 +5,22 @@
 name: caching-recomended-approach
 on: [push]
 jobs:
-  checkout-and-cache-deps:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [18, 20]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/workflows/reusable-setup.yaml
-        with:
-          node-version: ${{matrix.node}}
+  use-reusable-wf:
+    uses: ./.github/workflows/reusable-setup.yaml
+    with:
+      node-version: '20'
+
+  # checkout-and-cache-deps:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node: [18, 20]
+  #   steps:
+  #     - uses: actions/checkout@v4
 
   upload-artifacts:
     runs-on: ubuntu-latest
-    needs: checkout-and-cache-deps
+    needs: use-reusable-wf
 
     steps:
       - uses: actions/checkout@v4
