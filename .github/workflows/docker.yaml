@@ -3,21 +3,22 @@ on:
   workflow_dispatch:
     inputs:
       docker-image:
-        type: string
+        type: choice
         required: true
-        default: node:20
+        default: node:20-alpine3.17
+        options:
+          - node:20-alpine3.17
+          - node:21-alpine3.18
 jobs:
   docker-job:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['node:20-alpine3.17', 'node:21-alpine3.18']
     container:
-      image: node:20.3-alpine3.17
-      #   credentials:
-      #     username: Romany
-      #     password: test
+      image: ${{matrix.node-version}}
       env:
-        API_URL: https://romany.sefen.com
-      ports:
-        - 80
+        API_URL: https:://test.com
     steps:
       - name: log Node version & os Versions
         run: |

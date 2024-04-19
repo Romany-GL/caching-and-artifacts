@@ -1,0 +1,23 @@
+name: checkout-and-setup-node
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        type: string
+        default: '20'
+        description: node version to setup node
+
+jobs:
+  checkout-and-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        name: checkout
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: install deps
+        run: npm ci
