@@ -3,7 +3,7 @@
 # This will autmoatically do the cache
 
 name: caching-recomended-approach
-on: push
+on: [push]
 jobs:
   checkout-and-cache-deps:
     runs-on: ubuntu-latest

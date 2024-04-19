@@ -1,0 +1,27 @@
+name: use-docker-container
+on:
+  workflow_dispatch:
+    inputs:
+      docker-image:
+        type: string
+        required: true
+        default: node:20
+jobs:
+  docker-job:
+    runs-on: ubuntu-latest
+    container:
+      image: node:20.3-alpine3.17
+      #   credentials:
+      #     username: Romany
+      #     password: test
+      env:
+        API_URL: https://romany.sefen.com
+      ports:
+        - 80
+    steps:
+      - name: log Node version & os Versions
+        run: |
+          node -v 
+          cat /etc/os-release
+      - name: log env vars
+        run: echo $API_URL
