@@ -23,8 +23,9 @@ jobs:
     needs: use-reusable-wf
 
     steps:
-      - name: install deps
-        run: npm ci
+      - uses: ./.github/workflows/reusable-setup.yaml
+        with:
+          node-version: '20'
 
       - name: run test
         run: npm test
