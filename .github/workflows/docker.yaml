@@ -32,6 +32,7 @@ jobs:
       #   password: sefen
       env:
         API_URL: https:://test.com
+      options: --name test-docker
 
     steps:
       - name: log Node version & os Versions
