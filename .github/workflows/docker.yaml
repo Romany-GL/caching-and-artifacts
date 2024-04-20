@@ -1,3 +1,10 @@
+# in this wF we use to Dcoker container instead of GH runner
+# to use docker, we add a container key to the job
+# then we specify the image to use in the docker container
+# I have created a matrix to run two jobs with different node versions
+# we can add credentails key with username and password keys to authorise the docker container
+# also we can add env vaeiables and volumes
+
 name: use-docker-container
 on:
   workflow_dispatch:
@@ -12,13 +19,20 @@ on:
 jobs:
   docker-job:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: ['node:20-alpine3.17', 'node:21-alpine3.18']
+    # strategy:
+    #   matrix:
+    #     node-version: ['node:20-alpine3.17', 'node:21-alpine3.18']
+    #     # define docker image specs
     container:
-      image: ${{matrix.node-version}}
+      image: ${{inputs.docker-image}}
+      ports:
+        - 80
+      # credentials:
+      #   username: Romany
+      #   password: sefen
       env:
         API_URL: https:://test.com
+
     steps:
       - name: log Node version & os Versions
         run: |
